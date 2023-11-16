@@ -50,18 +50,6 @@ impl Buildpack for RubyBuildpack {
 
         if let Ok(lockfile) = fs_err::read_to_string(context.app_dir.join("Gemfile.lock")) {
             plan_builder = plan_builder.requires("ruby");
-
-            if context.app_dir.join("package.json").exists() {
-                plan_builder = plan_builder.requires("node");
-            }
-
-            if context.app_dir.join("yarn.lock").exists() {
-                plan_builder = plan_builder.requires("yarn");
-            }
-
-            if needs_java(&lockfile) {
-                plan_builder = plan_builder.requires("jdk");
-            }
         } else if context.app_dir.join("Gemfile").exists() {
             plan_builder = plan_builder.requires("ruby");
         }
